@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{width:100%;height:500px;}
+		#r-result{width:100%;margin-top:5px;}
+		p{margin:5px; font-size:14px;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=UZiAa2jnkmg5a4EHnicF5rpCG7VSdGyh"></script>
+	<title>添加/删除工具条、比例尺控件</title>
+</head>
+<body>
+	<div id="allmap"></div>
+	<div id="r-result">
+		<input type="button" onclick="add_control();" value="添加比例尺" />
+		<input type="button" onclick="delete_control();" value="删除比例尺" />
+		<input type="button" onclick="add_smallmap();" value="添加缩小图" />
+		<input type="button" onclick="delete_mvsmallmap();" value="删除缩小图" />
+		<input type="button" onclick="set_map_zoom();" value="缩小图" />
+		<input type="button" onclick="get_position();" value="获取当前定位" />
+	</div>
+	<p>liangxiao.ren@qq.com</p>
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map_level = 11;
+	var map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(116.404, 39.915), map_level);
+	map.enableScrollWheelZoom();
+	var mapType1 = new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP,BMAP_HYBRID_MAP]});
+	var mapType2 = new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT});
+	var overView = new BMap.OverviewMapControl();
+	var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
+	
+	var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+	var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+	var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+	/*缩放控件type有四种类型:
+	BMAP_NAVIGATION_CONTROL_SMALL：仅包含平移和缩放按钮；BMAP_NAVIGATION_CONTROL_PAN:仅包含平移按钮；BMAP_NAVIGATION_CONTROL_ZOOM：仅包含缩放按钮*/
+	
+	//添加控件和比例尺
+	function add_control(){
+		map.addControl(top_left_control);        
+		map.addControl(top_left_navigation);     
+		map.addControl(top_right_navigation);    
+	}
+	//移除控件和比例尺
+	function delete_control(){
+		map.removeControl(top_left_control);     
+		map.removeControl(top_left_navigation);  
+		map.removeControl(top_right_navigation); 
+	}
+	//添加地图类型和缩略图
+	function add_smallmap(){
+		map.addControl(mapType1);          //2D图，卫星图
+		map.addControl(mapType2);          //左上角，默认地图控件
+		map.setCurrentCity("北京");        //由于有3D图，需要设置城市哦
+		map.addControl(overView);          //添加默认缩略地图控件
+		map.addControl(overViewOpen);      //右下角，打开
+	}
+	//移除地图类型和缩略图
+	function delete_mvsmallmap(){
+		map.removeControl(mapType1);   //移除2D图，卫星图
+		map.removeControl(mapType2);
+		map.removeControl(overView);
+		map.removeControl(overViewOpen);
+	}
+	//地图放大缩小
+	function set_map_zoom(){
+		map_level += 1;
+		map.setZoom(map_level);
+	}
+	//获取当前定位
+	function get_position(){
+		  // 添加定位控件
+		  var geolocationControl = new BMap.GeolocationControl();
+		  geolocationControl.addEventListener("locationSuccess", function(e){
+			// 定位成功事件
+			var address = '';
+			address += e.addressComponent.province;
+			address += e.addressComponent.city;
+			address += e.addressComponent.district;
+			address += e.addressComponent.street;
+			address += e.addressComponent.streetNumber;
+			alert("当前定位地址为：" + address);
+		  });
+		  geolocationControl.addEventListener("locationError",function(e){
+			// 定位失败事件
+			alert(e.message);
+		  });
+		  map.addControl(geolocationControl);
+	}
+</script>

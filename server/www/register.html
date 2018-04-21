@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″>
+<head>
+<title>Sign In</title>
+<style>
+div{
+    background:#009FCC;
+    font-size:24px;
+    padding:5px;
+    color:white;
+}
+form{
+    background: #F8F8FF ;
+    border:#357FC4 solid 1px;
+    color:#575454;  
+    width:400px;
+    margin:20px auto;
+    font-size:15px;
+}
+table{
+    margin:10px auto;
+}
+a{
+    text-decoration:none;
+}
+input[type="button"]{
+    background:#228B22;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    width:120px;
+    height:40px;
+}
+td:first-child{
+    text-align:right;
+    padding:0 5px;
+}
+td:only-child{
+    text-align:center;
+    font-size:12px;
+}
+span:before{
+    content:"* ";
+    color:red;
+}
+input[type="text"]:read-only{
+    border:#888484 solid 2px;
+    background:#888484;
+    font-weight:bold;   
+}
+input[type="text"]:hover{
+    background:#EFD9AC;
+}
+</style>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="application/x-javascript"> 
+
+    function ajax_post_data(){
+        var accepted = document.getElementsByName("accepted");
+        //  if(accepted.checked){
+
+        //     var male = make
+        // }else{
+        //      alert("error");
+        // }
+       
+        var name = document.getElementById("name").value
+        var password = document.getElementById("password").value
+        var email = document.getElementById("email").value
+        var phone = document.getElementById("phone").value
+        var age = document.getElementById("age").value
+        var user_sex = document.getElementsByName("user_sex");
+        if(user_sex[0].checked){
+            var male = 'male'
+        }else{
+            var male = 'female'
+        }
+
+        var url= "asp/login.asp";
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: {
+             action:'insert',
+             name:name,
+             password:password,
+             sex:male,
+             phone:phone,
+             email:email,
+             age:age
+
+          },
+          success: function (data) {
+                  if (data == "success"){
+                  // 构造返回链接
+
+                  }
+                },
+          error: function () {
+                  debugger;
+                    //$("#hello").text("程序运行出错！");
+                }
+
+        });
+
+    }
+</script>
+
+</head>
+<body>
+<form>
+<div>Register account</div>
+<table>
+    <tr><td><span>Name</span></td><td><input type="text" id="name" name="user_name" /></td></tr>
+    <tr><td><span>Age</span></td><td><input type="text" id="age" name="user_age" /></td></tr>
+    <tr><td><span>Email</span></td><td><input type="text" id="email" name="user_email" /></td></tr>
+    <tr><td><span>Password</span></td><td><input type="password" id="password" name="user_password" /></td></tr>
+    <tr><td><span>Confirm Password</span></td><td><input type="password" id="conf_passwd" name="user_confirm_password" /></td></tr>   
+    <tr><td>sex</td><td><input type="radio" id="male" name="user_sex" checked />male<input type="radio" id="female" name="user_sex" />woman</td></tr>
+    <tr><td>Phone Number</td><td><input type="text" id="phone" name="user_phone" /></td></tr>
+    <tr><td colspan="2"><input type="checkbox" name="accepted"/>I have seen and accepted it. <a href="#">User Agreement</a></td></tr>
+    <tr><td colspan="2"><input type="button" name="submit" onclick="ajax_post_data()" value="Register Now" /></td></tr>
+</table>
+</form>
+</body>
+</html>

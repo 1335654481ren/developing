@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Test样式页面</title>
+	<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+	<script>
+		var socket;  
+		function Connect(){  
+			try{  
+				socket=new WebSocket('ws://127.0.0.1:8181');  
+			}catch(e){  
+				alert('error');  
+				return;  
+			}  
+			socket.onopen = sOpen;  
+			socket.onerror = sError;
+			socket.onmessage= sMessage;
+			socket.onclose= sClose;
+		}  
+		function sOpen(){
+			alert('connect success!');
+		}
+		function sError(e){
+			alert("error " + e);
+		}
+		function sMessage(msg){  
+			alert('server says:' + msg.data);  
+		}
+		function sClose(e){
+			alert("connect closed:" + e.code);
+		}  
+		function Send(){
+			socket.send(document.getElementById("msg").value);
+		} 
+		function Close(){
+			socket.close();
+		}
+		function ajax_get_data(){
+			var name1 = document.getElementById("name1").value;
+			var name2 = document.getElementById("name2").value;
+			$.get("/asp/demo_test.asp",
+		    {
+		      name:"Donald Duck",
+		      city:"Duckburg",
+		      name1:name1,
+		      name2:name2
+		    },
+		    function(data,status){
+		    	if(status != success){
+		    		alert("数据：" + data + "\n状态：" + status);
+		    	}
+		    });
+		}
+		function ajax_post_data(){
+			$.post("/asp/demo_test_post.asp",
+		    {
+		      name:"Donald Duck",
+		      city:"Duckburg"
+		    },
+		    function(data,status){
+		    	if(status != success){
+		    		alert("数据：" + data + "\n状态：" + status);
+		    	}
+		    });
+		}
+	</script>
+</head>
+<style type="text/css">
+body{
+	background: #0BE093;
+  font-family: 'Open Sans', sans-serif;
+}
+body ul {
+  color:#fff;
+  text-align: center;
+  padding: 1em 0;
+  font-size: 1.5em;
+}
+
+body form{
+	transition: 0.1s all;
+	-webkit-transition: 0.1s all;
+	-moz-transition: 0.1s all;
+	-o-transition: 0.1s all;
+}
+</style>
+
+<body> 
+
+<!-- 目录 -->
+<ul class="navbar">
+  <li><a href="index.html">首页</a>
+  <li><a href="water.html">连接1</a>
+</ul>
+<!--
+<form action="/get"  method="get" target="_blank">
+-->
+<form action="http://localhost:1234/get"  method="get">
+  First name: <input type="text" name="fname" /><br />
+  Last name: <input type="text" name="lname" /><br />
+  <input type="submit" value="send(Get method)" />
+</form>
+<form action="http://localhost:1234"  method="post">
+  First name: <input type="text" name="fname" /><br />
+  Last name: <input type="text" name="lname" /><br />
+  <input type="submit" value="send(Post method)" />
+</form>
+<form action="/asp/demo_test_post.asp" method="post">  
+        <!--   
+             cellpadding 属性规定单元边沿与其内容之间的空白。  
+             注释：请勿将该属性与 cellspacing 属性相混淆，cellspacing 属性规定的是单元之间的空间。  
+             从实用角度出发，最好不要规定 cellpadding，而是使用 CSS 来添加内边距。  
+         -->  
+        <table border="1" bordercolor="#00ffff" cellpadding=10 cellspacing=0  
+            width=400>  
+            <!-- 由此可见，<th>和<td>标签都是用于表格单元格显示的。不同的是<th>在单元格中加粗显示。 -->  
+            <tr>  
+                <!-- 占两列 -->  
+                <th colspan="2">注册表单</th>  
+            </tr>  
+            <tr>  
+                <td>用户名称</td>  
+                <td><input type="text" name="user" value=""><br /></td>  
+            </tr>  
+            <tr>  
+                <td>输入密码</td>  
+                <td><input type="password" name="pwd" /><br /></td>  
+            </tr>  
+            <tr>  
+                <td>确认密码</td>  
+                <td><input type="password" name="repwd" /><br /></td>  
+            </tr>  
+            <tr>  
+                <td>选择性别</td>  
+                <td><input type="radio" name="sex" value="nan" />男 <input  
+                    type="radio" name="sex" value="nv" checked="checked" />女<br /></td>  
+            </tr>  
+            <tr>  
+                <td>选择技术</td>  
+                <td><input type="checkbox" name="tech" value="java" />JAVA <input  
+                    type="checkbox" name="tech" value="html" />HTML <input  
+                    type="checkbox" name="tech" value="css" />CSS <br /></td>  
+            </tr>  
+            <tr>  
+                <td>选择国家</td>  
+                <td><select name="country">  
+                        <option value="none">--选择国家--</option>  
+                        <option value="usa">美国</option>  
+                        <option value="en">英国</option>  
+                        <!-- 默认选择中国 -->  
+                        <option value="cn" selected="selected">中国</option>  
+                </select></td>  
+            </tr>  
+            <tr>  
+                <th colspan="2"><input type="reset" value="清除数据" /> <input  
+                    type="submit" value="提交数据" /></th>  
+            </tr>  
+        </table>  
+ </form>  
+
+<input id="msg" type="text">  
+<button id="connect" onclick="Connect();">Connect</button>  
+<button id="send" onclick="Send();">Send</button>  
+<button id="close" onclick="Close();">Close</button>
+<button id="full" onclick="full();">Full</button>
+<br>
+<input id="name1" type="test">
+<input id="name2" type="test">
+<button id="ajax_get_data" onclick="ajax_get_data();">HTTP GET 请求</button>
+<br>
+<input id="name3" type="test">
+<input id="name4" type="test">
+<button id="ajax_post_data" onclick="ajax_post_data();">POST 请求</button>
+
+</body>
+</html>

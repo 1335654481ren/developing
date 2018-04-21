@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>login in</title>
+<link rel="stylesheet" type="text/css" href="css/login_style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="App Loction Form,Login Forms,Sign up Forms,Registration Forms,News latter Forms,Elements"/>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="application/x-javascript"> 
+    addEventListener("load", 
+        function() { 
+        setTimeout(hideURLbar, 0); 
+        }, 
+        false); 
+    function hideURLbar(){ 
+        window.scrollTo(0,1); 
+    }
+
+    function ajax_post_data(){
+        var named = document.getElementById("name").value
+        var password = document.getElementById("passwd").value
+        var url= "asp/login.asp";
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: {
+             namea:named,
+             password:password
+
+          },
+          success: function (data) {
+                  if (data == "success"){
+                  // 构造返回链接
+                    var returnUrl = location.search.split("/")[0];
+                    location.href = returnUrl + "/index.html";
+                  }
+                },
+          error: function () {
+                  debugger;
+                    //$("#hello").text("程序运行出错！");
+                }
+
+        });
+
+    }
+</script>
+
+</head>
+<body>
+	<h1>Horizon Robots</h1>
+		<div class="app-location">
+			<h2>Welcome to Horizon</h2>
+			<div class="line"><span></span></div>
+			<div class="location"><img src="images/location.png" class="img-responsive" alt="" /></div>
+			<form >
+				<input type="text" class="text" id="name" value="E-mail address" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'E-mail address';}" >
+				<input type="password" id="passwd" value="Password" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Password';}">
+				<div class="submit"><input type="button" onclick="ajax_post_data()" value="Sign in" ></div>
+				<div class="clear"></div>
+				<div class="new">
+					<h3><a href="#">Forgot password ?</a></h3>
+					<h4><a href="register.html">New here ? Sign Up</a></h4>
+					<div class="clear"></div>
+				</div>
+			</form>
+		</div>
+	<!--start-copyright-->
+   		<div class="copy-right">
+				<p>Copyright©2016 - 2017 Horizon Robotics, Inc. 版权所有 粤ICP备17098896号-1 <a href="http://www.horizon.ai/" target="_blank">北京地平线信息科技股份有限公司</a></p>
+		</div>
+	<!--//end-copyright-->
+</body>
+</html>

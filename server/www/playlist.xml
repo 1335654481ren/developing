@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+urlskin:皮肤背景图片
+colorcircle：播放控制区背景色
+ipod_title：播放器名称
+title_color：播放器名称字体色
+ombra：音乐随机播放关闭为：no
+buttoncolor：播放控制按钮颜色
+autoStart：启动时自动播放，关闭为：no
+download：音乐下载开关，关闭为：no
+ipod_volume：播放器初始音量，值为：1~100
+-->
+<player urlskin="img/nero.jpg" colorcircle="343921" ipod_title="mp3播放器" title_color="343921" ombra="yes" buttoncolor="FFFFFF" autoStart="no" download="yes" ipod_volume="300">
+<song path="http://www.soufs.com/UploadFile/video/2011/1-4/2011141147219199750.mp3" title="大笑江湖" imgsong="img/59.png" />
+<song path="http://sflxx.com/images/uploadfiles/20070925084904.mp3" title="王菲 - 但愿人长久"  imgsong="img/wang fei.png"/>
+<song path="http://down.wofs.com.cn:8080/uploadlib/wohyun/20110617105501_749668.mp3" title="周杰伦 -枫" imgsong="img/jay.png" />
+<song path="http://down.wofs.com.cn:8080/uploadlib/wohyun/20110617105530_832201.mp3" title="周杰伦 - 浪漫手机"  imgsong="img/jay.png"/>
+<song path="http://down.wofs.com.cn:8080/uploadlib/wohyun/20110617105315_336578.mp3" title="周杰伦 - 黑色毛衣" imgsong="img/jay.png" />
+<song path="http://down.wofs.com.cn:8080/uploadlib/wohyun/20110617105810_256613.mp3" title="周杰伦、梁心颐 - 珊瑚海"  imgsong="img/jay.png"/>
+<song path="http://down.wofs.com.cn:8080/uploadlib/wohyun/20110617105943_633079.mp3" title="周杰伦 - 一路向北"  imgsong="img/jay.png"/>
+
+<song path="http://www.vipiano.com/uploads/201103/27/3e2ac822-e660-45a5-8427-a1dd9086489b.mp3" title="杨幂 - 爱的供养" imgsong="" />
+<song path="http://210.42.144.120/yuanbao/2002/doc/mp3/baihu.MP3" title="陈瑞 - 白狐" />
+<song path="http://szlzzx.com/disk/UpLoadFiles/2011/5/31/11/2011531113541kc01Q.mp3" title="邬拉 - 望春风（娘妻主题曲）" imgsong="" />
+</player>
+
+
+	
+	
+	
