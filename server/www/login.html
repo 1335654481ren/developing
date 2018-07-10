@@ -18,21 +18,40 @@
 
     function ajax_post_data(){
         var named = document.getElementById("name").value
-        var password = document.getElementById("passwd").value
+        var passwordd = document.getElementById("passwd").value
+        //alert(password);
         var url= "asp/login.asp";
         $.ajax({
           type: 'POST',
           url: url,
           data: {
              namea:named,
-             password:password
-
+             password:passwordd,
+             end:"d"
           },
           success: function (data) {
                   if (data == "success"){
                   // 构造返回链接
                     var returnUrl = location.search.split("/")[0];
-                    location.href = returnUrl + "/index.html";
+                    location.href = returnUrl + "/databases.html";
+                  }
+                  if (data == "not_register"){
+                    // 构造返回链接
+                    var con;
+                    con=confirm("you have not register, do you want to registe now?"); //在页面上弹出对话框
+                    if(con==true){
+                      var returnUrl = location.search.split("/")[0];
+                      location.href = returnUrl + "/register.html";                      
+                    }
+                  }
+                  if (data == "passwd_error"){
+                    // 构造返回链接
+                    var con;
+                    con=confirm("your password error, do you want to find it now?"); //在页面上弹出对话框
+                    if(con==true){
+                      var returnUrl = location.search.split("/")[0];
+                      location.href = returnUrl + "/register.html";                      
+                    }
                   }
                 },
           error: function () {
@@ -58,7 +77,7 @@
 				<div class="submit"><input type="button" onclick="ajax_post_data()" value="Sign in" ></div>
 				<div class="clear"></div>
 				<div class="new">
-					<h3><a href="#">Forgot password ?</a></h3>
+					<h3><a href="index.html">Forgot password ?</a></h3>
 					<h4><a href="register.html">New here ? Sign Up</a></h4>
 					<div class="clear"></div>
 				</div>

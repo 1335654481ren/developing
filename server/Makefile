@@ -8,7 +8,7 @@
 
 # Targets of the build, ___needadd___
 OUTPUT_FILE      = app
-
+OUTPUT_JSONLIB      = libjson.a
 # DEBUG can be set to YES to include debugging info, or NO otherwise
 DEBUG            = 0
 USE_MEM_TEST     = 0
@@ -32,8 +32,18 @@ CXXFLAGS         := ${RELEASE_CXXFLAGS}
 LDFLAGS          := ${RELEASE_LDFLAGS}
 endif
 
-OUT              = $(OUTPUT_DIR)$(OUTPUT_FILE)
+# mkdir and find files
+MAKE             = make
+MAKE_DIR         = $(PWD)
+SRC_DIR          = $(MAKE_DIR)/src/
+OBJ_DIR          = $(MAKE_DIR)/obj/
+LIB_DIR          = $(MAKE_DIR)/lib/
+INCLUDE_DIR      = $(MAKE_DIR)/include
+RELEASE_DIR      = $(MAKE_DIR)/
+OUTPUT_DIR       = $(RELEASE_DIR)
 
+OUT              = $(OUTPUT_DIR)$(OUTPUT_FILE)
+JSONLIB           = $(LIB_DIR)$(OUTPUT_JSONLIB)
 # Makefile code common to all platforms, ___needadd___
 USR_DEFINE       += -Werror
 
@@ -60,15 +70,6 @@ LD               := $(CROSS_COMPILE)g++
 AR               := $(CROSS_COMPILE)ar cr
 RANLIB           := $(CROSS_COMPILE)ranlib
 STRIP            := $(CROSS_COMPILE)strip
-# mkdir and find files
-MAKE             = make
-MAKE_DIR         = $(PWD)
-SRC_DIR          = $(MAKE_DIR)/src/
-OBJ_DIR          = $(MAKE_DIR)/obj/
-LIB_DIR          = $(MAKE_DIR)/lib/
-INCLUDE_DIR      = $(MAKE_DIR)/include
-RELEASE_DIR      = $(MAKE_DIR)/
-OUTPUT_DIR       = $(RELEASE_DIR)
 
 # auto search src_dir/subfile_dir
 SRC_APP          = $(shell find $(SRC_DIR) -maxdepth 2 \( ! -regex '.*/\..*' \) -type d)
@@ -81,7 +82,7 @@ INCLUDE          +=
 
 # lib dir
 LIB              := -L$(LIB_DIR)
-LIB              += -lpthread -lz -lboost_system -lboost_thread -lmysqlclient
+LIB              += -lpthread -lz -lboost_system -lboost_thread -lmysqlclient -lcrypto -ljwt
 # add lib file, ___needadd___
 SRC_DIR_ALL      += $(foreach dir, $(SRC_APP), $(dir))
 vpath            %.cpp $(SRC_DIR_ALL)
@@ -100,11 +101,18 @@ DEP_FILES        := $(subst .o,.d,${OBJ_FILES})
 all: \
 	dir \
 	BEFOREBUILD \
-	$(OUT)
+	$(OUT) \
+	$(JSONLIB)
 
 $(OUT): $(OBJ_FILES)
 	@$(CXX) -o $@ $(LDFLAGS) $(SLIBS) $(addprefix $(OBJ_DIR),$(notdir $^)) $(LIB) $(USE_ELF2FLT)
 	@echo -e "$(CXX) $(LDFLAGS)-o $@ $(USE_ELF2FLT)\n"
+
+JSONLIB_OBJ = json_value.o json_reader.o json_main_test.o json_writer.o
+$(JSONLIB): $(JSONLIB_OBJ)
+	ar cr $@ $(addprefix $(OBJ_DIR),$(notdir $^))
+	@echo -e "$(CXX) $(LDFLAGS)-o $@ $(USE_ELF2FLT)\n"
+
 ifeq (${STRIP_RELEASE}, 1)
 	${STRIP} ${OUT}
 endif

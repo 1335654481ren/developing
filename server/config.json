@@ -1,17 +1,29 @@
-{
-"server" : {
-	"ip" : "127.0.0.1",
-	"port" : 1234,
-	"root" : "./www"
-},
-"websokcet" : {
-	"ip" : "127.0.0.1",
-	"port" : 8181,
-},
-"mysql" : {
-	"ip" : "127.0.0.1",
-	"port" : 3306,
-	"username" : "root",
-	"passwd" : "root" 
-}	
-}
+{ 
+    "name":"renxiaoliang", 
+    "age":23, 
+    "sex_is_male":true,
+    "phone":"13366470670",
+    "Email":"liangxiao.ren@qq.com", 
+    "server":
+    {
+    	"ip":"127.0.0.1",
+    	"port":1234,
+    	"root":"./www",
+    	"start":true
+    },
+    "websokcet":
+    {
+    	"ip":"127.0.0.1",
+    	"port":8181,
+    	"start":true
+    },
+    "mysql":
+    {
+    	"ip":"127.0.0.1",
+    	"port":3306,
+    	"username":"root",
+    	"passwd":"root",
+    	"start":true
+    },
+    "services":["http_server","websocket_server","mysql_server"] 
+} 

@@ -1,5 +1,6 @@
 #include "reply.hpp"
 #include <string>
+#include <json/json.h>
 
 namespace http {
     namespace server {
@@ -252,26 +253,76 @@ namespace http {
 	{
 	    reply rep;
 	    rep.status = reply::ok;
-		
-		printf("body =%s\n",parsers.body.c_str());
+	    rep.content = "error";
+	    printf("body =%s\n",parsers.body.c_str());
 		int len = parsers.numbers.size();
 		for( int i = 0; i < len; i++)
 		{
 			printf("%d : %s == %s\n",i, parsers.numbers[i].key.c_str(),parsers.numbers[i].value.c_str());
+		}	    
+		//longin function
+		if(parsers.body == "/asp/login.asp"){
+			vector<USER_Table> reqq;
+			char cmd_str[200];
+		    ptr_mysql->query_user_info("user", "user_info", "name",parsers.numbers[0].value,cmd_str);
+		    ptr_mysql->runQuery(&reqq, (const char *)cmd_str);
+		    if( reqq.size() == 1){
+		    	USER_Table v =	reqq.at(0);
+		    	if( parsers.numbers[1].value == get<3>(v) )
+		    		rep.content = "success";
+		    	else
+		    		rep.content = "passwd_error";
+		    }else{
+		    	rep.content = "not_register";
+		    }
 		}
-	    vector<USER_Table> reqq;
-		char cmd_str[100];
-	    ptr_mysql->query_user_info("user", "user_info", "name","user1",cmd_str);
-	    ptr_mysql->runQuery(&reqq, (const char *)cmd_str);
-		for (size_t i = 0; i < reqq.size(); i++) {
-			USER_Table v =	reqq.at(i);
-			printf("name = %s  passwd = %s\n",get<1>(v).c_str(),get<2>(v).c_str());
+		//longin function
+		if(parsers.body == "/asp/register.asp"){
+
+			USER_Table reqq(0,parsers.numbers[1].value,parsers.numbers[2].value, \
+							parsers.numbers[3].value,parsers.numbers[4].value, \
+							parsers.numbers[5].value,parsers.numbers[6].value, \
+							atoi(parsers.numbers[7].value.c_str()));
+			
+		    my_ulonglong affectedRows = ptr_mysql->inster_user_info("user", "user_info", reqq);
+	
+		   if( affectedRows == 1){
+		   		rep.content = "success";
+		   }else{
+		    	rep.content = "register error";
+		   }
+		}
+		//request user_info function
+		if(parsers.body == "/asp/user_info.asp"){
+			Json::Value root;
+	    	Json::Value arrayObj;
+	    	Json::Value item;
+	    	root["status"] = "success";
+			vector<USER_Table> reqq;
+			char cmd_str[200];
+		    ptr_mysql->query_tabel_all("user", "user_info",cmd_str);
+		    ptr_mysql->runQuery(&reqq, (const char *)cmd_str);
+		    int len = reqq.size();
+		    root["count"] = len;
+		    for(int i = 0; i < len; i++){
+		    	USER_Table v =	reqq.at(i);
+		    	item["id"] = get<0>(v);
+		    	item["name"] = get<1>(v);
+		    	item["email"] = get<2>(v);
+		    	item["password"] = get<3>(v);
+		    	item["id_card"] = get<4>(v);
+		    	item["status"] = get<5>(v);
+		    	item["type"] = get<6>(v);
+		    	item["age"] = get<7>(v);
+		    	arrayObj.append(item);
+		    }
+		    root["array"] = arrayObj;
+		    root.toStyledString();
+		    std::string out = root.toStyledString();
+	    	//std::cout << out << std::endl;
+		    rep.content = out;
 		}
 
-
-	//    rep.content = "{\"total\":100,\"data\":[{\"id\":10001,\"name\":\"scott\"},{\"id\":10002,\"name\":\"tiger\"}]}";//stock_replies::to_string(status);
-	//    rep.content = stock_replies::to_string(reply::ok);
-		rep.content = "success";
 	    rep.headers.resize(2);
 	    rep.headers[0].name = "Content-Length";
 	    rep.headers[0].value = std::to_string(rep.content.size());

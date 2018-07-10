@@ -36,8 +36,8 @@ namespace http {
 	{//解析请求
 	    // Decode url to path.
 	    std::string request_path;
-	    printf("req.uri : %s\n",req.uri.c_str());
-	    printf("req.method : %s\n",req.method.c_str());
+	//    printf("req.uri : %s\n",req.uri.c_str());
+	//    printf("req.method : %s\n",req.method.c_str());
 	//    printf("req.headers : %ld\n",req.headers.size());
 
 	//	for(unsigned int i = 0; i < req.headers.size(); i ++)
@@ -49,7 +49,7 @@ namespace http {
 			rep = reply::stock_reply(reply::bad_request);
 			return;
 	    }//解析url
-	    printf("request_path : %s\n",request_path.c_str());
+	//    printf("request_path : %s\n",request_path.c_str());
 	    // Request path must be absolute and not contain "..".
 	    // 请求url的条件
 	    if (request_path.empty() || request_path[0] != '/'
@@ -84,7 +84,7 @@ namespace http {
 			return;
 	    }
 	    if(req.post_data.size() > 0){
-	    	//printf("Post parsers: == %s\n",req.post_data.c_str());
+	    	//printf("Post parsers: == %s",req.post_data.c_str());
 	    	Req_Parser parsers;
 	    	parsers.body = req.uri;
 	    	//printf("body =%s\n",parsers.body.c_str());
@@ -110,7 +110,7 @@ namespace http {
 	    {
 			request_path += "login.html";
 	    }
-	    printf("=======%s\n",request_path.c_str() );
+	//    printf("=======%s\n",request_path.c_str() );
 	    // Determine the file extension.
 	    std::size_t last_slash_pos = request_path.find_last_of("/");//最后一个/符号
 	    std::size_t last_dot_pos = request_path.find_last_of(".");//最后一个.

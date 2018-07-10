@@ -8,7 +8,8 @@
 		var socket;  
 		function Connect(){  
 			try{  
-				socket=new WebSocket('ws://127.0.0.1:8181');  
+				socket=new WebSocket('ws://127.0.0.1:8181');
+				//socket=new WebSocket('ws://tcp.tunnel.echomod.cn:36507');   
 			}catch(e){  
 				alert('error');  
 				return;  

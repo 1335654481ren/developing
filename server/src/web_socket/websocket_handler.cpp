@@ -17,6 +17,26 @@ void Websocket_Handler::set_mysql_inferface(){
 	request_->mysql_database = database;
 }
 
+string Websocket_Handler::get_cmd(){
+	return request_->get_cmd();
+}
+
+string Websocket_Handler::get_ack(){
+	return request_->get_ack();
+}
+
+string Websocket_Handler::get_client_id(){
+	return request_->get_client_id();
+}
+
+string Websocket_Handler::get_name(){
+	return request_->get_name();
+}
+
+void Websocket_Handler::send(const std::string& message){
+	return request_->send(message);
+}
+
 int Websocket_Handler::process(){
 	if(status_ == WEBSOCKET_UNCONNECT){
 		return handshark();

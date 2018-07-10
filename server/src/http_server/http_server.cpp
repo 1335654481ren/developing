@@ -1,18 +1,18 @@
 #include "http_server.hpp"
 #include <signal.h>
 #include <utility>
+#include <json/json.h>
 
 namespace http {
     namespace server {
 
-	server::server(const std::string& address, const std::string& port,
-		const std::string& doc_root)
+	server::server(Json::Value config)
 	    : io_service_(),
 	    signals_(io_service_),
 	    acceptor_(io_service_),
 	    connection_manager_(),
 	    socket_(io_service_),
-	    request_handler_(doc_root)//处理请求
+	    request_handler_(config["server"]["root"].asString())//处理请求
 	{
 	    // Register to handle the signals that indicate when the server should exit.
 	    // It is safe to register for the same signal multiple times in a program,
@@ -24,12 +24,22 @@ namespace http {
 #endif // defined(SIGQUIT)
 
 	    do_await_stop();
-		// create mysel connect
-		mysql_conn_	 = new MySql("127.0.0.1", "root", "root", nullptr);
-		request_handler_.set_mysql(mysql_conn_);
+		// create mysql connect
+		if(config["mysql"]["start"].asBool())
+		{
+			cout<<"http_server mysql start ok !\n";
+			string ip = config["mysql"]["ip"].asString();
+			string username = config["mysql"]["username"].asString();
+			string passwd = config["mysql"]["passwd"].asString();
+			mysql_conn_	 = new MySql(ip.c_str(), username.c_str(), passwd.c_str(), nullptr);
+			request_handler_.set_mysql(mysql_conn_);
+		}else{
+			cout<<"http_server mysql is not config in config files!\n";
+		}
+		
 	    // Open the acceptor with the option to reuse the address (i.e. SO_REUSEADDR).
 	    boost::asio::ip::tcp::resolver resolver(io_service_);
-	    boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve({address, port});
+	    boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve({config["server"]["ip"].asString(), std::to_string(config["server"]["port"].asInt())});
 	    acceptor_.open(endpoint.protocol());
 	    acceptor_.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 	    acceptor_.bind(endpoint);
@@ -63,9 +73,7 @@ namespace http {
 			    	connection_manager_.start(std::make_shared<connection>(
 				    	std::move(socket_), connection_manager_, request_handler_, mysql_conn_));
 			    }
-
 		    	do_accept();
-		    	printf("--------------new do_accept \n");
 		    });
 	}
 

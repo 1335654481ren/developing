@@ -47,7 +47,7 @@ namespace http {
 				    if (result == request_parser::good)//解析请求成功
 				    {
 				    	if( bytes_transferred-request_parser_.req_length > 0){
-					    	printf("request_parser::good\n");
+					    	//printf("request_parser::good\n");
 				//	    	printf("deal with length ==== %d\n",(int)(bytes_transferred-request_parser_.req_length));
 							int len = bytes_transferred-request_parser_.req_length;
 							char *temp = (char *)malloc((len+1)*sizeof(char));

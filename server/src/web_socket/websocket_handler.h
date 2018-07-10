@@ -26,7 +26,12 @@ public:
 	Websocket_Handler(int fd);
 	~Websocket_Handler();
 	int process();
+    string get_cmd();
+    string get_ack();
+    string get_name();
+    string get_client_id();
 	inline char *getbuff();
+	void send(const std::string& message);
 	/// mysql interface
 	void set_mysql_inferface();
 	MySql *database;

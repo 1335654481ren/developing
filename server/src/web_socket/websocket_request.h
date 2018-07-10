@@ -16,8 +16,13 @@ public:
 	void process();
 	void print();
 	void reset();
+    string get_cmd();
+    string get_ack();
+    string get_name();
+    string get_client_id();
 	/// mysql interface
 	MySql *mysql_database;
+	void send(const std::string& message);
 private:
 	int fetch_fin(char *msg, int &pos);
 	int fetch_opcode(char *msg, int &pos);

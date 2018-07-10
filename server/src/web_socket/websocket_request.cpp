@@ -28,14 +28,34 @@ int Websocket_Request::fetch_websocket_info(char *msg){
 	return fetch_payload(msg, pos);
 }
 
+string Websocket_Request::get_cmd(){
+	return respond_->get_cmd();
+}
+
+string Websocket_Request::get_ack(){
+	return respond_->get_ack();
+}
+
+string Websocket_Request::get_client_id(){
+	return respond_->get_client_id();
+}
+
+string Websocket_Request::get_name(){
+	return respond_->get_name();
+}
+
+void Websocket_Request::send(const std::string& message){
+	respond_->send(message);
+}
+
 void Websocket_Request::print(){
-	DEBUG_LOG("WEBSOCKET PROTOCOL\n"
-				"FIN: %d\n"
-				"OPCODE: %d\n"
-				"MASK: %d\n"
-				"PAYLOADLEN: %d\n"
-				"PAYLOAD: %s",
-				fin_, opcode_, mask_, payload_length_, payload_);
+	// DEBUG_LOG("WEBSOCKET PROTOCOL\n"
+	// 			"FIN: %d\n"
+	// 			"OPCODE: %d\n"
+	// 			"MASK: %d\n"
+	// 			"PAYLOADLEN: %d\n"
+	// 			"PAYLOAD: %s",
+	// 			fin_, opcode_, mask_, payload_length_, payload_);
 }
 
 void Websocket_Request::process(){

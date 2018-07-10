@@ -7,6 +7,7 @@
 #include "request_handler.hpp"
 #include "MySql.hpp"
 #include "MySqlException.hpp"
+#include <json/json.h>
 
 namespace http {
     namespace server {
@@ -20,8 +21,7 @@ namespace http {
 
 		/// Construct the server to listen on the specified TCP address and port, and
 		/// serve up files from the given directory.
-		explicit server(const std::string& address, const std::string& port,
-			const std::string& doc_root);
+		explicit server(Json::Value config);
 
 		/// Run the server's io_service loop.
 		void run();

@@ -4,6 +4,10 @@
 <head>
 <title>Sign In</title>
 <style>
+body{
+  background: #0BE093;
+  font-family: 'Open Sans', sans-serif;
+}
 div{
     background:#009FCC;
     font-size:24px;
@@ -11,7 +15,7 @@ div{
     color:white;
 }
 form{
-    background: #F8F8FF ;
+    background: #323542 ;
     border:#357FC4 solid 1px;
     color:#575454;  
     width:400px;
@@ -19,6 +23,7 @@ form{
     font-size:15px;
 }
 table{
+    background:#323542;
     margin:10px auto;
 }
 a{
@@ -58,53 +63,61 @@ input[type="text"]:hover{
 <script type="application/x-javascript"> 
 
     function ajax_post_data(){
-        var accepted = document.getElementsByName("accepted");
-        //  if(accepted.checked){
-
-        //     var male = make
-        // }else{
-        //      alert("error");
-        // }
+        if(document.getElementById("accept").checked){
+          
+        }else{
+             alert("User Agreement,not accepted");
+             return;
+        }
        
         var name = document.getElementById("name").value
         var password = document.getElementById("password").value
+        var conf_password = document.getElementById("conf_passwd").value
+        if(password != conf_password){
+          alert("confirm password error");
+          return;
+        }
         var email = document.getElementById("email").value
-        var phone = document.getElementById("phone").value
+        var idcard = document.getElementById("idcard").value
         var age = document.getElementById("age").value
-        var user_sex = document.getElementsByName("user_sex");
-        if(user_sex[0].checked){
-            var male = 'male'
+        var user_status = document.getElementsByName("user_status");
+        if(user_status[0].checked){
+            var status = 'lock'
         }else{
-            var male = 'female'
+            var status = 'unlock'
         }
 
-        var url= "asp/login.asp";
+        var url= "asp/register.asp";
         $.ajax({
           type: 'POST',
           url: url,
           data: {
              action:'insert',
              name:name,
-             password:password,
-             sex:male,
-             phone:phone,
              email:email,
-             age:age
-
+             password:password,
+             idcard:idcard,
+             status:status,
+             type:"normal",
+             age:age,
+             end:"d"
           },
           success: function (data) {
                   if (data == "success"){
-                  // 构造返回链接
-
+                    // 构造返回链接
+                    var con;
+                    con=confirm("you have registered, do you want to login now?"); //在页面上弹出对话框
+                    if(con==true){
+                      var returnUrl = location.search.split("/")[0];
+                      location.href = returnUrl + "/login.html";                      
+                    }
                   }
                 },
           error: function () {
-                  debugger;
+                  alert("register error, please check you input info!!!");
                     //$("#hello").text("程序运行出错！");
                 }
-
         });
-
     }
 </script>
 
@@ -117,10 +130,10 @@ input[type="text"]:hover{
     <tr><td><span>Age</span></td><td><input type="text" id="age" name="user_age" /></td></tr>
     <tr><td><span>Email</span></td><td><input type="text" id="email" name="user_email" /></td></tr>
     <tr><td><span>Password</span></td><td><input type="password" id="password" name="user_password" /></td></tr>
-    <tr><td><span>Confirm Password</span></td><td><input type="password" id="conf_passwd" name="user_confirm_password" /></td></tr>   
-    <tr><td>sex</td><td><input type="radio" id="male" name="user_sex" checked />male<input type="radio" id="female" name="user_sex" />woman</td></tr>
-    <tr><td>Phone Number</td><td><input type="text" id="phone" name="user_phone" /></td></tr>
-    <tr><td colspan="2"><input type="checkbox" name="accepted"/>I have seen and accepted it. <a href="#">User Agreement</a></td></tr>
+    <tr><td><span>Confirm Password</span></td><td><input type="password" id="conf_passwd" name="user_confirm_password" /></td></tr>
+    <tr><td>ID Card</td><td><input type="text" id="idcard" name="user_phone" /></td></tr>   
+    <tr><td>Status</td><td><input type="radio" id="lock" name="user_status" checked />lock<input type="radio" id="unlock" name="user_status" />unlock</td></tr>
+    <tr><td colspan="2"><input type="checkbox"  id="accept" name="accepted"/>I have seen and accepted it. <a href="#">User Agreement</a></td></tr>
     <tr><td colspan="2"><input type="button" name="submit" onclick="ajax_post_data()" value="Register Now" /></td></tr>
 </table>
 </form>

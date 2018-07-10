@@ -106,22 +106,35 @@ MySqlPreparedStatement MySql::prepareStatement(const char* const command) const 
     return MySqlPreparedStatement(command, connection_);
 }
 
-my_ulonglong MySql::inster_user_info(char * databases, char *table,  USER_Table data){
+my_ulonglong MySql::inster_user_info(string databases, string table,  USER_Table data){
     my_ulonglong affectedRows = 0; 
     char cmd_change_databases[40];
-    sprintf(cmd_change_databases,"USE %s",databases);
+    sprintf(cmd_change_databases,"USE %s",databases.c_str());
     runCommand(cmd_change_databases);
     char cmd_str[400];
 
     memset(cmd_str,0x00,sizeof(cmd_str));
 
     sprintf(cmd_str,"INSERT INTO %s (name,email, password,id_card,status,type,age)" 
-                " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %d)",table,get<1>(data).c_str(),get<2>(data).c_str(),get<3>(data).c_str(),
+                " VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %d)",table.c_str(),get<1>(data).c_str(),get<2>(data).c_str(),get<3>(data).c_str(),
                 get<4>(data).c_str(),get<5>(data).c_str(),get<6>(data).c_str(),get<7>(data));
 
     affectedRows = runCommand(cmd_str);
 
     return affectedRows;
+}
+
+my_ulonglong MySql::query_tabel_all(string databases, string table,char *cmd_str) {
+
+    char cmd_change_databases[40];
+    sprintf(cmd_change_databases,"USE %s",databases.c_str());
+    runCommand(cmd_change_databases);
+    // *****************************************
+    // All commands use safe prepared statements
+    // ***************************************** 
+    sprintf(cmd_str,"SELECT * FROM %s",table.c_str());
+
+    return 0;
 }
 
 my_ulonglong MySql::query_user_info(string databases, string table, string  key, string value, char *cmd_str) {
@@ -153,33 +166,33 @@ my_ulonglong MySql::query_user_info(string databases, string table, string  key,
     // //表table删除某一个属性
     // conn.runCommand("alter table user_info drop test");
 
-my_ulonglong MySql::delete_user_info(char * databases, char *table, char* key, char *value){
+my_ulonglong MySql::delete_user_info(string databases, string table, char* key, char *value){
     char cmd_change_databases[40];
-    sprintf(cmd_change_databases,"USE %s",databases);
+    sprintf(cmd_change_databases,"USE %s",databases.c_str());
     runCommand(cmd_change_databases);
     char cmd_str[100];
-    sprintf(cmd_str,"DELETE FROM %s WHERE %s = %s",table,key,value);
+    sprintf(cmd_str,"DELETE FROM %s WHERE %s = %s",table.c_str(),key,value);
     // //删除数据
     const my_ulonglong affectedRows = runCommand(cmd_str);
     ////跟新主键
     //删除原主键
-    sprintf(cmd_str,"alter table %s drop id",table);
+    sprintf(cmd_str,"alter table %s drop id",table.c_str());
     runCommand(cmd_str);
     //添加新主键
-    sprintf(cmd_str,"alter table %s ADD id MEDIUMINT( 8 ) NOT NULL FIRST",table);
+    sprintf(cmd_str,"alter table %s ADD id MEDIUMINT( 8 ) NOT NULL FIRST",table.c_str());
     runCommand(cmd_str);
     //设置自增
-    sprintf(cmd_str,"alter table %s MODIFY COLUMN id MEDIUMINT( 8 ) NOT NULL AUTO_INCREMENT,ADD PRIMARY KEY(id)",table);
+    sprintf(cmd_str,"alter table %s MODIFY COLUMN id MEDIUMINT( 8 ) NOT NULL AUTO_INCREMENT,ADD PRIMARY KEY(id)",table.c_str());
     runCommand(cmd_str);
     return affectedRows;
 }
 
-my_ulonglong MySql::update_user_info(char *databases, char *table, char* key_id, char* keyid_value, char* key, char *value){
+my_ulonglong MySql::update_user_info(string databases, string table, char* key_id, char* keyid_value, char* key, char *value){
     char cmd_change_databases[40];
-    sprintf(cmd_change_databases,"USE %s",databases);
+    sprintf(cmd_change_databases,"USE %s",databases.c_str());
     runCommand(cmd_change_databases);
     char cmd_str[100];
-    sprintf(cmd_str,"UPDATE %s  set %s = \"%s\" WHERE %s = \"%s\"",table,key,value,key_id,keyid_value);
+    sprintf(cmd_str,"UPDATE %s  set %s = \"%s\" WHERE %s = \"%s\"",table.c_str(),key,value,key_id,keyid_value);
     // //删除数据
     const my_ulonglong affectedRows = runCommand(cmd_str);
     return affectedRows;
