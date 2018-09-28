@@ -1,0 +1,17 @@
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/install.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/list_install_components.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/rebuild_cache.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/deps.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/upload.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/install/local.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/install/strip.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/copy.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/edit_cache.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/CMakeFiles/otacli.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/test/CMakeFiles/rebuild_cache.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/test/CMakeFiles/install.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/test/CMakeFiles/list_install_components.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/test/CMakeFiles/unit_test.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/test/CMakeFiles/install/local.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/test/CMakeFiles/install/strip.dir
+/home/renxl/work/share/github/developing/server/test_modules/iotkit/otacli/built/test/CMakeFiles/edit_cache.dir

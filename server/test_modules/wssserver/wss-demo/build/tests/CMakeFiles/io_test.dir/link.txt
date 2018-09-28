@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++11 -Wall -Wextra -Wsign-conversion -fno-access-control   CMakeFiles/io_test.dir/io_test.cpp.o  -o io_test -rdynamic -lboost_system -lboost_coroutine -lboost_context -lboost_thread -lboost_chrono -lboost_date_time -lboost_atomic -lpthread -lcrypto -lpthread 

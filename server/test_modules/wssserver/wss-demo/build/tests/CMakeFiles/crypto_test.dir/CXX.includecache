@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+.././crypto.hpp
+cmath
+-
+iomanip
+-
+istream
+-
+sstream
+-
+string
+-
+vector
+-
+openssl/buffer.h
+-
+openssl/evp.h
+-
+openssl/md5.h
+-
+openssl/sha.h
+-
+
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/tests/crypto_test.cpp
+cassert
+-
+vector
+-
+crypto.hpp
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/tests/crypto.hpp
+

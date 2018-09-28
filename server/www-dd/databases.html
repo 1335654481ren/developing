@@ -1,0 +1,203 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>data center</title>
+<link type="text/css" href="css/bootstrap.min.css" rel="stylesheet" />
+<link type="text/css" href="css/databases.css" rel="stylesheet" />
+<style>
+	.ulList {
+		list-style:none;overflow:hidden;
+	}
+	.liList {
+		float:left;
+		width : 50%;
+	}
+</style>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script>
+  function delete_select(){
+    alert(this.getAttribute("name"));
+  }
+
+  function update_data(jsonObject){
+    var table = document.getElementById('petsOnSale');
+    var tbodies= table.getElementsByTagName("tbody");
+    for(i=0;i<tbodies.length;i++){
+        table.removeChild(tbodies[i]);
+    }
+    //创建tbody  
+    var oTbody = document.createElement("tbody");
+    oTbody.id = "tbody";  
+    table.appendChild(oTbody);
+    var tbody= document.getElementById("tbody"); 
+    for(var i=0;i<jsonObject.length;i++){  
+      var tr=document.createElement('tr');  
+      var id=document.createElement('td')  
+      var name=document.createElement('td')  
+      var email=document.createElement('td')
+      var password=document.createElement('td')
+      var status=document.createElement('td')
+      var type=document.createElement('td')
+      var age=document.createElement('td')
+      var button=document.createElement('button')   
+      id.innerHTML=jsonObject[i].id;  
+      name.innerHTML=jsonObject[i].name;
+      email.innerHTML=jsonObject[i].email;
+      password.innerHTML=jsonObject[i].password;
+      status.innerHTML=jsonObject[i].status;
+      type.innerHTML=jsonObject[i].type;  
+      age.innerHTML=jsonObject[i].age;
+      button.innerHTML="<input name=\"按钮\" type=\"button\" onClick=\"delete_select()\" value=\"按钮\"></input>";
+      button.setAttribute("name",jsonObject[i].name);
+      tr.appendChild(id);  
+      tr.appendChild(name);
+      tr.appendChild(email);
+      tr.appendChild(age);
+      //tr.appendChild(password);
+      tr.appendChild(status);
+      tr.appendChild(type);
+      tr.appendChild(button);    
+      tbody.appendChild(tr);  
+    }  
+  }
+  function ajax_post_data(){
+    //alert(password);
+    var url= "asp/user_info.asp";
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: {
+         action:"user_info",
+         end:"d"
+      },
+      success: function (data) {
+              var jsonObject=eval('('+data+')');
+              //alert(data);
+              if (jsonObject.status == "success"){
+              // 构造返回链接
+                //alert();
+                update_data(jsonObject.array);
+              }
+              if (data == "not_register"){
+  
+              }
+              if (data == "passwd_error"){
+  
+              }
+            },
+      error: function () {
+              debugger;
+                //$("#hello").text("程序运行出错！");
+            }
+    });
+
+}
+</script>
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand mr-0" href="#">数据中心</a>
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="#"></a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="databases.html">
+                  <span data-feather="home"></span>
+                  数据管理管理 <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="user_info.html">
+                  <span data-feather="arrow-right-circle"></span>
+                  用户数据 <span class="sr-only">(current)</span>
+                </a>
+              </li>
+			  <li class="nav-item">
+                <a class="nav-link" href="car_info.html">
+                  <span data-feather="inbox"></span>
+                  车辆数据
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span> 相关链接</span>
+            </h6>
+            <ul class="nav flex-column mt-3">
+              <li class="nav-item">
+                <a class="nav-link py-1" href="http://www.horizon.ai/" target="_bank">
+                  <span data-feather="link-2"></span>地平线官网
+                </a>
+                <a class="nav-link" href="https://github.com/1335654481ren" target="_bank">
+                  <span data-feather="github"></span>项目主页
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span> 联系作者</span>
+            </h6>
+            <ul class="nav flex-column mt-3">
+              <li class="nav-item ml-3">
+                <img src="images/wo.jpg" style="width: 128px; height: 128px;" />
+              </li>
+            </ul>
+
+          </div>
+        </nav>
+
+        <main role="main" class="col-md-9 col-lg-10 pt-3 px-4">
+          <div  class="alert-top-wrapper alert-hide" >
+            <div class="alert alert-workaround alert-dismissable alert-success" >
+              <div>
+                <span data-feather="info"></span>
+                <span class="alert-content">操作成功！</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h4">数据</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+            </div>
+          </div>
+
+          <div class="options-left">
+            <div class="mb-3">
+              <button type="button" id="refreshType" class="btn btn-success btn-sm" onclick="ajax_post_data()">手动刷新</button>
+              <button type="button" id="refresh" class="btn btn-success btn-sm ml-2">自动刷新</button>
+            </div>
+
+            <div class="table-responsive">
+		      <table class="table table-striped table-sm" style="margin-top:17px; width: 500px" id="petsOnSale">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>name</th>
+                <th>email</th>
+                <th>age</th>
+      					<th>status</th>
+      					<th>type</th>
+              </tr>
+            </thead>
+            <tbody id='tbody'>
+              <tr>
+                <td colspan="6" style="text-align: center;">数据加载中，请稍后...</td>
+              </tr>
+            </tbody>
+          </table>  
+		    </div>
+		  </div>
+    </div>
+</body>
+</html>

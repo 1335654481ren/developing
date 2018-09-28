@@ -1,0 +1,11 @@
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/CMakeFiles/test.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/CMakeFiles/wss_examples.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/CMakeFiles/edit_cache.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/CMakeFiles/wss_client.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/CMakeFiles/rebuild_cache.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/tests/CMakeFiles/test.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/tests/CMakeFiles/edit_cache.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/tests/CMakeFiles/crypto_test.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/tests/CMakeFiles/io_test.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/tests/CMakeFiles/parse_test.dir
+/home/renxl/work/share/github/developing/server/test_modules/wssserver/wss-demo/build/tests/CMakeFiles/rebuild_cache.dir

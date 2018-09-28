@@ -1,6 +1,6 @@
 websocket_respond.o: \
- /home/renxl/work/share/github/developing/server/src/web_socket/websocket_respond.cpp \
- /home/renxl/work/share/github/developing/server/src/web_socket/websocket_respond.h \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/websocket_respond.cpp \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/websocket_respond.h \
  /home/renxl/work/share/github/developing/server/src/mysql/MySql.hpp \
  /home/renxl/work/share/github/developing/server/src/mysql/InputBinder.hpp \
  /home/renxl/work/share/github/developing/server/src/mysql/MySqlException.hpp \

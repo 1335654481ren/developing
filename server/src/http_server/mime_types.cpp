@@ -10,6 +10,11 @@ namespace http {
 		const char* mime_type;
 	    } mappings[] =
 	    {
+	    { "woff", "text/xml" },
+	    { "ttf", "text/xml" },	
+	    { "svg", "text/xml" },
+	    { "js", "js/js" },
+	    { "css", "text/css" },
 		{ "gif", "image/gif" },
 		{ "htm", "text/html" },
 		{ "html", "text/html" },

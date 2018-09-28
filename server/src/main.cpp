@@ -96,7 +96,6 @@ int main(int argc, char* argv[])
 	    	}else{
 	    		cout<<"http_server is not config in config files!\n";
 	    	}
-
 	    }
 	    catch (std::exception& e)
 	    {

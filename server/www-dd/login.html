@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>login in</title>
+<link rel="stylesheet" type="text/css" href="css/login_style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="App Loction Form,Login Forms,Sign up Forms,Registration Forms,News latter Forms,Elements"/>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="application/x-javascript"> 
+    addEventListener("load", 
+        function() { 
+        setTimeout(hideURLbar, 0); 
+        }, 
+        false); 
+    function hideURLbar(){ 
+        window.scrollTo(0,1); 
+    }
+
+    function ajax_post_data(){
+        var named = document.getElementById("name").value
+        var passwordd = document.getElementById("passwd").value
+        //alert(password);
+        var url= "asp/login.asp";
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: {
+             namea:named,
+             password:passwordd,
+             end:"d"
+          },
+          success: function (data) {
+                  if (data == "success"){
+                  // 构造返回链接
+                    var returnUrl = location.search.split("/")[0];
+                    location.href = returnUrl + "/databases.html";
+                  }
+                  if (data == "not_register"){
+                    // 构造返回链接
+                    var con;
+                    con=confirm("you have not register, do you want to registe now?"); //在页面上弹出对话框
+                    if(con==true){
+                      var returnUrl = location.search.split("/")[0];
+                      location.href = returnUrl + "/register.html";                      
+                    }
+                  }
+                  if (data == "passwd_error"){
+                    // 构造返回链接
+                    var con;
+                    con=confirm("your password error, do you want to find it now?"); //在页面上弹出对话框
+                    if(con==true){
+                      var returnUrl = location.search.split("/")[0];
+                      location.href = returnUrl + "/register.html";                      
+                    }
+                  }
+                },
+          error: function () {
+                  debugger;
+                }
+
+        });
+
+    }
+</script>
+
+</head>
+<body>
+	<h1>Horizon Robots</h1>
+		<div class="app-location">
+			<h2>Welcome to Horizon</h2>
+			<div class="line"><span></span></div>
+			<div class="location"><img src="images/location.png" class="img-responsive" alt="" /></div>
+			<form >
+				<input type="text" class="text" id="name" value="E-mail address" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'E-mail address';}" >
+				<input type="password" id="passwd" value="Password" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Password';}">
+				<div class="submit"><input type="button" onclick="ajax_post_data()" value="Sign in" ></div>
+				<div class="clear"></div>
+				<div class="new">
+					<h3><a href="index.html">Forgot password ?</a></h3>
+					<h4><a href="register.html">New here ? Sign Up</a></h4>
+					<div class="clear"></div>
+				</div>
+			</form>
+		</div>
+	<!--start-copyright-->
+   		<div class="copy-right">
+				<p>Copyright©2016 - 2017 Horizon Robotics, Inc. 版权所有 粤ICP备17098896号-1 <a href="http://www.horizon.ai/" target="_blank">北京地平线信息科技股份有限公司</a></p>
+		</div>
+	<!--//end-copyright-->
+</body>
+</html>

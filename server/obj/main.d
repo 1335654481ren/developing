@@ -21,10 +21,10 @@ main.o: /home/renxl/work/share/github/developing/server/src/main.cpp \
  /home/renxl/work/share/github/developing/server/include/json/reader.h \
  /home/renxl/work/share/github/developing/server/include/json/features.h \
  /home/renxl/work/share/github/developing/server/include/json/writer.h \
- /home/renxl/work/share/github/developing/server/src/web_socket/network_interface.h \
- /home/renxl/work/share/github/developing/server/src/web_socket/websocket_handler.h \
- /home/renxl/work/share/github/developing/server/src/web_socket/base64.h \
- /home/renxl/work/share/github/developing/server/src/web_socket/sha.h \
- /home/renxl/work/share/github/developing/server/src/web_socket/debug_log.h \
- /home/renxl/work/share/github/developing/server/src/web_socket/websocket_request.h \
- /home/renxl/work/share/github/developing/server/src/web_socket/websocket_respond.h
+ /home/renxl/work/share/github/developing/server/src/ws_socket/network_interface.h \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/websocket_handler.h \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/base64.h \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/sha.h \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/debug_log.h \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/websocket_request.h \
+ /home/renxl/work/share/github/developing/server/src/ws_socket/websocket_respond.h

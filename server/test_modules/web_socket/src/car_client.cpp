@@ -9,7 +9,52 @@
 #include <string>
 #include <unistd.h>
 #include <json/json.h>
-;
+#include "http_client.h"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <memory>
+#include <iostream>
+#include <string>
+#include <unistd.h>
+#include "nebula_client.h"
+#define TEST_TAG "hobottest"
+
+int main(int argc, char *argv[])
+{
+    NebulaClient car_client;
+    Json::Value device_info;
+    Json::Value id_data;
+    id_data["device_id"] = "BYD000001";
+    device_info["id_data"] = id_data.toStyledString();
+    std::ifstream file_stream("./rsa_public_key.pem");
+    if(!file_stream.good())
+    {
+        std::cout << "not find ./rsa_public_key.pem" << std::endl;
+        return 0;
+    }
+    std::stringstream buffer;
+    std::ifstream in("./rsa_public_key.pem");
+    buffer << in.rdbuf();
+    std::string id_rsa = buffer.str();
+    //std::cout << id_rsa << std::endl;
+    device_info["pubkey"] =  id_rsa;
+
+    std::stringstream tenant_token;
+    std::ifstream in2("./tenant_token.pem");
+    tenant_token << in2.rdbuf();
+    std::string str_token = tenant_token.str();
+    device_info["tenant_token"] = str_token;
+
+    std::string devinfo_json = device_info.toStyledString();
+    std::cout << device_info << std::endl;
+
+    car_client.RegistDevice(devinfo_json);
+
+    car_client.ShowTokenStatus();
+    std::cout << "Result: ok"<< std::endl;
+}
+
 using easywsclient::WebSocket;
 static WebSocket::pointer ws = NULL;
 
@@ -39,7 +84,7 @@ void handle_message(const std::string & message)
     printf("get message>>> %s\n", message.c_str());
 }
 
-int main(int argc, char **argv)
+int main_dd(int argc, char **argv)
 {
     if(argc >1)
     {flag = 1; printf("run as adapter!\n");}else{printf("run as a car client!\n");}

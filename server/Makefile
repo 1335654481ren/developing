@@ -82,7 +82,7 @@ INCLUDE          +=
 
 # lib dir
 LIB              := -L$(LIB_DIR)
-LIB              += -lpthread -lz -lboost_system -lboost_thread -lmysqlclient -lcrypto -ljwt
+LIB              += -lpthread -lz -lboost_system -lboost_thread -lmysqlclient -lcrypto -ljwt -lssl -lboost_filesystem
 # add lib file, ___needadd___
 SRC_DIR_ALL      += $(foreach dir, $(SRC_APP), $(dir))
 vpath            %.cpp $(SRC_DIR_ALL)
