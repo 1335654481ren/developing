@@ -36,12 +36,12 @@ namespace http {
 	{//解析请求
 	    // Decode url to path.
 	    std::string request_path;
-	//    printf("req.uri : %s\n",req.uri.c_str());
-	//    printf("req.method : %s\n",req.method.c_str());
-	//    printf("req.headers : %ld\n",req.headers.size());
+	 //    printf("req.uri : %s\n",req.uri.c_str());
+	 //    printf("req.method : %s\n",req.method.c_str());
+	 //    printf("req.headers : %ld\n",req.headers.size());
 
-	//	for(unsigned int i = 0; i < req.headers.size(); i ++)
-	//	    printf("%s : %s\n",req.headers[i].name.c_str(),req.headers[i].value.c_str());
+		// for(unsigned int i = 0; i < req.headers.size(); i ++)
+		//     printf("%s : %s\n",req.headers[i].name.c_str(),req.headers[i].value.c_str());
 	    
 	    if (!url_decode(req.uri, request_path))//解析请求地址
 	    {

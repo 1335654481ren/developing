@@ -124,6 +124,24 @@ typedef tuple<
     int
 >USER_Table;
 
+typedef tuple<
+    int,
+    string,
+    string,
+    string,
+    string,
+    string,
+    double,
+    double,
+    double,
+    double,
+    double,
+    float,
+    double,
+    double,
+    double
+>CAR_Table;
+
 class MySql {
     public:
         MySql(
@@ -212,10 +230,12 @@ class MySql {
          */
         my_ulonglong query_tabel_all(string databases, string table,char *cmd_str);
         my_ulonglong inster_user_info(string databases, string table, USER_Table data);
+        my_ulonglong inster_car_info(string databases, string table,  CAR_Table data);
         my_ulonglong query_user_info(string databases, string table, string  key, string value,char *cmd_str);
         my_ulonglong delete_user_info(string databases, string table, char* key, char *value);
         my_ulonglong update_user_info(string databases, string table, char* key_id, char* keyid_value, char* key, char *value);
- 
+        my_ulonglong update_pos(string databases, string table, char* keyid_value, double latitude,double longitude,double x, double y, double z, float speed, double yaw, double pitch, double roll);
+
     private:
         MYSQL* connection_;
 };

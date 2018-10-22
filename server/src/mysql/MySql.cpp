@@ -124,17 +124,36 @@ my_ulonglong MySql::inster_user_info(string databases, string table,  USER_Table
     return affectedRows;
 }
 
-my_ulonglong MySql::query_tabel_all(string databases, string table,char *cmd_str) {
-
+my_ulonglong MySql::inster_car_info(string databases, string table,  CAR_Table data){
+    my_ulonglong affectedRows = 0; 
     char cmd_change_databases[40];
     sprintf(cmd_change_databases,"USE %s",databases.c_str());
     runCommand(cmd_change_databases);
+    char cmd_str[400];
+
+    memset(cmd_str,0x00,sizeof(cmd_str));
+
+    sprintf(cmd_str,"INSERT INTO %s (car_id,user_id, status,car_status,sensor_status,latitude,longitude,x,y,z,speed,yaw,pitch,roll)" 
+                " VALUES ('%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%f','%f', '%f', '%f', '%f', %f)",table.c_str(),get<1>(data).c_str(),get<2>(data).c_str(),get<3>(data).c_str(),
+                get<4>(data).c_str(),get<5>(data).c_str(),get<6>(data),get<7>(data),get<8>(data),get<9>(data),get<10>(data),get<11>(data),get<12>(data),get<13>(data),get<14>(data));
+
+    affectedRows = runCommand(cmd_str);
+
+    return affectedRows;
+}
+
+
+my_ulonglong MySql::query_tabel_all(string databases, string table,char *cmd_str) {
+    my_ulonglong affectedRows = 0;
+    char cmd_change_databases[40];
+    sprintf(cmd_change_databases,"USE %s",databases.c_str());
+    affectedRows = runCommand(cmd_change_databases);
     // *****************************************
     // All commands use safe prepared statements
     // ***************************************** 
     sprintf(cmd_str,"SELECT * FROM %s",table.c_str());
 
-    return 0;
+    return affectedRows;
 }
 
 my_ulonglong MySql::query_user_info(string databases, string table, string  key, string value, char *cmd_str) {
@@ -149,6 +168,7 @@ my_ulonglong MySql::query_user_info(string databases, string table, string  key,
 
     return 0;
 }
+
     // //删除数据
     // conn.runCommand("DELETE FROM user_info WHERE name = \"user2\"");
     // //更新数据
@@ -193,6 +213,19 @@ my_ulonglong MySql::update_user_info(string databases, string table, char* key_i
     runCommand(cmd_change_databases);
     char cmd_str[100];
     sprintf(cmd_str,"UPDATE %s  set %s = \"%s\" WHERE %s = \"%s\"",table.c_str(),key,value,key_id,keyid_value);
+    std::cout << cmd_str << std::endl;
+    // //删除数据
+    const my_ulonglong affectedRows = runCommand(cmd_str);
+    return affectedRows;
+}
+
+my_ulonglong MySql::update_pos(string databases, string table, char* keyid_value, double latitude,double longitude,double x, double y, double z, float speed, double yaw, double pitch, double roll){
+    char cmd_change_databases[40];
+    sprintf(cmd_change_databases,"USE %s",databases.c_str());
+    runCommand(cmd_change_databases);
+    char cmd_str[300];
+    sprintf(cmd_str,"UPDATE %s set latitude=%f,longitude=%f,x=%f,y=%f,z=%f,speed=%f,yaw=%f,pitch=%f,roll=%f  WHERE car_id = \"%s\"",table.c_str(),latitude,longitude,x,y,z,speed,yaw,pitch,roll,keyid_value);
+    //std::cout << cmd_str << std::endl;
     // //删除数据
     const my_ulonglong affectedRows = runCommand(cmd_str);
     return affectedRows;

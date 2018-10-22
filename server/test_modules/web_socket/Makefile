@@ -94,7 +94,7 @@ INCLUDE          +=
 
 # lib dir
 LIB              := -L$(LIB_DIR)
-LIB              += -lpthread -lz -lboost_system -lboost_thread -lmysqlclient -lcrypto -ljson -lcurl -lprotobuf -lopencv_core -lopencv_imgproc -lopencv_highgui
+LIB              += -lpthread -lz -lboost_system -lboost_thread -lmysqlclient -lcrypto -ljson -lcurl -lprotobuf #-lopencv_core -lopencv_imgproc -lopencv_highgui
 # add lib file, ___needadd___
 SRC_DIR_ALL      += $(foreach dir, $(SRC_APP), $(dir))
 vpath            %.cpp $(SRC_DIR_ALL)

@@ -32,6 +32,42 @@ namespace http {
 			string username = config["mysql"]["username"].asString();
 			string passwd = config["mysql"]["passwd"].asString();
 			mysql_conn_	 = new MySql(ip.c_str(), username.c_str(), passwd.c_str(), nullptr);
+			// mysql_conn_->runCommand("DROP DATABASE IF EXISTS user");
+		 //    mysql_conn_->runCommand("CREATE DATABASE user");
+		 //    mysql_conn_->runCommand("USE user");
+		 //    mysql_conn_->runCommand("DROP TABLE IF EXISTS user_info");
+		 //    mysql_conn_->runCommand(
+		 //        "CREATE TABLE user_info ("
+		 //            "id INT NOT NULL AUTO_INCREMENT,"
+		 //            "PRIMARY KEY(id),"
+		 //            "name VARCHAR(64) NOT NULL,"
+		 //            "email CHAR(64) NOT NULL,"
+		 //            "password CHAR(64) NOT NULL,"
+		 //            "id_card CHAR(64) NOT NULL,"
+		 //            "status CHAR(64) NOT NULL,"
+		 //            "type CHAR(64) NOT NULL,"
+		 //            "age INT)");
+		    // mysql_conn_->runCommand("USE user");
+		    // mysql_conn_->runCommand("DROP TABLE IF EXISTS car");
+		    // mysql_conn_->runCommand(
+		    //     "CREATE TABLE car ("
+		    //         "id INT NOT NULL AUTO_INCREMENT,"
+		    //         "PRIMARY KEY(id),"
+		    //         "car_id VARCHAR(64) NOT NULL,"
+		    //         "user_id CHAR(64) NOT NULL,"
+		    //         "status CHAR(64) NOT NULL,"
+		    //         "car_status CHAR(64) NOT NULL,"
+		    //         "sensor_status CHAR(64) NOT NULL,"
+		    //         "latitude DOUBLE,"
+		    //         "longitude DOUBLE,"
+		    //         "x DOUBLE,"
+		    //         "y DOUBLE,"
+		    //         "z DOUBLE,"
+		    //         "speed FLOAT,"
+		    //         "yaw DOUBLE,"
+		    //         "pitch DOUBLE,"
+		    //         "roll DOUBLE)");
+
 			request_handler_.set_mysql(mysql_conn_);
 		}else{
 			cout<<"http_server mysql is not config in config files!\n";

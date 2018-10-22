@@ -145,14 +145,44 @@ int Websocket_Respond::process(MySql *mysql, char *request_data ,int data_length
     Json::Reader reader;
     Json::Value config;
     //printf("recve length =%d,%s\n",data_length,request_data);
+    if(data_length < 100){
+        printf("error  recve length =%d,%s\n",data_length,request_data);
+        return 0;
+    }
     if (reader.parse(request_data, config))
     {
+        //std::cout << "json type ok" << std::endl;
         //读取根节点信息  
         string action = config["action"].asString();
         if(action == "register"){
+            std::cout << "action :register" << std::endl;
             client_name = config["name"].asString();
             if(client_name == "car"){
-                client_id = config["id"].asString();
+                client_id = config["car_id"].asString();
+                std::cout << "client id :" << client_id << std::endl;
+                vector<CAR_Table> reqq;
+                char cmd_str[200];
+                mysql->query_user_info("user", "car", "car_id",client_id,cmd_str);
+                mysql->runQuery(&reqq, (const char *)cmd_str);
+                if( reqq.size() == 1){
+                    CAR_Table v =  reqq.at(0);
+                    if( client_id == get<1>(v) ){
+                        std::cout << "car: " << client_id << "login"<< std::endl;
+                    }
+                }else{
+                    Json::Value pos = config["pos"];
+                    std::cout << "---pos" << std::endl;
+                    CAR_Table reqq(0,config["car_id"].asString(),config["user_id"].asString(), 
+                    config["status"].asString(),config["car_status"].asString(), config["sensor_status"].asString(),
+                    config["latitude"].asDouble(),config["longitude"].asDouble(),pos["x"].asDouble(),pos["y"].asDouble(),pos["z"].asDouble(),(float)config["speed"].asDouble(), 
+                    config["yaw"].asDouble(),config["pitch"].asDouble(),config["roll"].asDouble());
+                    my_ulonglong affectedRows = mysql->inster_car_info("user", "car", reqq);
+
+                    if( affectedRows == 1){
+                        std::cout << " register success" << std::endl;
+                    }
+                }
+
                 Json::Value report;
                 report["action"] = "report";
                 report["name"] = "management";
@@ -167,8 +197,10 @@ int Websocket_Respond::process(MySql *mysql, char *request_data ,int data_length
                 root["status"] = "success";
                 root["description"] = "car register ok";
             }else if(client_name == "adapter"){
+                client_id = config["user_id"].asString();
                 root["status"] = "success";
                 root["description"] = "adapter register ok";
+                printf("adapter login on\n");
             } 
             std::cout<< "register :" << client_name << std::endl;
 
@@ -184,19 +216,83 @@ int Websocket_Respond::process(MySql *mysql, char *request_data ,int data_length
         }else if(action == "cmd"){
             root["status"] = "success";
             pthread_mutex_lock(&cmd_mutex);
-            if(cmd_list.size() < 100)
+            if(cmd_list.size() < 100){
+                printf("add a cmd\n");
                 cmd_list.push_back(request_data);
-            else{
+            }else{
                 cmd_list.erase(cmd_list.begin());
             }
             pthread_mutex_unlock(&cmd_mutex);
+        }else if(action == "sync"){
+            //std::cout << "-----------sync" << std::endl;
+            if(config["type"].asString() == "pos"){ //latitude,longitude,
+                Json::Value pos = config["pos"];
+                my_ulonglong Rowcount = mysql->update_pos("user", "car", (char*)config["car_id"].asString().c_str(), config["latitude"].asDouble(), config["longitude"].asDouble(),pos["x"].asDouble(),pos["y"].asDouble(),pos["z"].asDouble(), (float)config["speed"].asDouble(), config["yaw"].asDouble(), config[
+                    "pitch"].asDouble(), config["roll"].asDouble());
+                if(Rowcount == 1){
+                    //std::cout << "update pos ok" << std::endl;
+                }else if(Rowcount == 0){
+                    std::cout << "the car_id =" << config["car_id"].asString() << "not registe on server !" <<std::endl;
+                }
+            }else if(config["type"].asString() == "status"){
+                //std::cout << "update status------" << std::endl;
+                my_ulonglong Rowcount = mysql->update_user_info("user", "car", (char*)"car_id", (char*)config["car_id"].asString().c_str(),(char*)config["key"].asString().c_str(),(char*)config["value"].asString().c_str());
+                if(Rowcount == 1){
+                    //std::cout << "updata status ok" << std::endl;
+                }else{
+                    std::cout << "update status error ! !" << std::endl;
+                }
+            }
+        }else if(action == "use_sync"){
+            if(config["type"] == "init"){
+                vector<CAR_Table> reqq;
+                char cmd_str[200];
+                mysql->query_tabel_all("user", "car",cmd_str);
+                mysql->runQuery(&reqq, (const char *)cmd_str);
+                int len = reqq.size();
+                Json::Value ack,item,arrayObj;
+                ack["action"] = "ack";
+                ack["status"] = "error";
+                ack["name"] = "management";
+                ack["time"] = get_time();
+                ack["count"] = len;
+                for(int i = 0; i < len; i++){
+                    CAR_Table v =    reqq.at(i);
+                    item["id"] = get<0>(v);
+                    item["car_id"] = get<1>(v);
+                    item["user_id"] = get<2>(v);
+                    item["status"] = get<3>(v);
+                    item["car_status"] = get<4>(v);
+                    item["sensor_status"] = get<5>(v);
+                    item["latitude"] = get<6>(v);
+                    item["longitude"] = get<7>(v);
+                    item["x"] = get<8>(v);
+                    item["y"] = get<9>(v);
+                    item["z"] = get<10>(v);
+                    item["speed"] = get<11>(v);
+                    item["yaw"] = get<12>(v);
+                    item["pitch"] = get<13>(v);
+                    item["roll"] = get<14>(v);
+                    arrayObj.append(item);
+                }
+                ack["array"] = arrayObj;
+                std::string out = ack.toStyledString();
+                send(out);
+                //std::cout << out << std::endl;
+            }else if(config["type"] == "connect_car"){
+
+            }else if(config["type"] == "req_pos"){
+
+            }else if(config["type"] == "cmd"){
+
+            }
         }  
         //int age = config["age"].asInt();  
         // bool sex_is_male = config["sex_is_male"].asBool();  
     }
     std::string send_msg = root.toStyledString();
-    send(send_msg);
-
+    //send(send_msg);
+    //printf("send string to:%s\n", send_msg.c_str());
 	// typedef tuple<
 	//     unique_ptr<int>,
 	//     unique_ptr<string>,

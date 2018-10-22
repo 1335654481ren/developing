@@ -62,20 +62,26 @@ Websocket_Handler *Network_Interface::get_handle(string id){
 
 void* Network_Interface::adapter(){
 	std::map<int,Websocket_Handler *>::iterator it;
+	printf("adapter running\n");
 	while(1){
-		if( websocket_handler_map_.empty()){
+		if(!websocket_handler_map_.empty()){
 			pthread_mutex_lock(&mutex);
 			for(it=websocket_handler_map_.begin();it!=websocket_handler_map_.end();++it)
 			{
 				if( (*it->second).get_name() == "adapter" ){
 					adapter_handler = &(*it->second);
 					adapter_status = "login_on";
+					printf("get adapter handle ok\n");
 					break;
+				}else{
+					//std::cout << " client list= :"<< (*it->second).get_name() << std::endl;
 				}
 			}
 			pthread_mutex_unlock(&mutex);
+			usleep(500*1000);
 		}else{
-			usleep(10*1000);
+			printf("adapter not login on\n");
+			usleep(500*1000);
 			continue;
 		}
 		while(adapter_status == "login_on"){
@@ -88,7 +94,7 @@ void* Network_Interface::adapter(){
 			    if (reader.parse(cmd, json_data))
 			    {
 			        //读取根节点信息  
-			        string car_id = json_data["id"].asString();
+			        string car_id = json_data["car_id"].asString();
 	 				Websocket_Handler *client_handler = get_handle(car_id);
 	 				if(client_handler != NULL){
  						client_handler->send(cmd);
@@ -108,10 +114,12 @@ void* Network_Interface::adapter(){
 			usleep(100);
 		}
 	}
+	printf("adapter exit\n");
 }
 
 void* Network_Interface::manage(void* pVoid){
     Network_Interface* p = (Network_Interface*) pVoid;
+    printf("start adpater manager\n");
     p->adapter();
     return p;
 }
@@ -140,6 +148,7 @@ int Network_Interface::init(Json::Value config){
 		return -1;
 	}
 	adapter_status = "login_out";
+	
 	create_thread();
 
 	epollfd_ = epoll_create(MAXEVENTSSIZE);
@@ -236,10 +245,19 @@ void Network_Interface::ctl_event(int fd, bool flag){
 		        root["status"] = "car login_out";
 		        std::string out = root.toStyledString();
 				adapter_handler->send(out);
-				printf("adapter login out!\n");
+				printf("car login out!\n");
 			}
+		    std::cout << "update status------" << std::endl;
+		    string client_id = websocket_handler_map_[fd]->get_client_id();
+            my_ulonglong Rowcount = mysql_conn_->update_user_info("user", "car", (char*)"car_id", (char*)client_id.c_str(), (char*)"car_status",(char*)"offline");
+            if(Rowcount == 1){
+                std::cout << "updata status ok" << std::endl;
+            }else{
+                std::cout << "update status error ! !" << std::endl;
+            }
 		}
 		pthread_mutex_lock(&mutex);
+		std::cout << "name + id = " << websocket_handler_map_[fd]->get_name() << "\t\t"<< websocket_handler_map_[fd]->get_client_id() << std::endl;
 		delete websocket_handler_map_[fd];
 		websocket_handler_map_.erase(fd);
 		pthread_mutex_unlock(&mutex);

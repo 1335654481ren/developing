@@ -254,12 +254,12 @@ namespace http {
 	    reply rep;
 	    rep.status = reply::ok;
 	    rep.content = "error";
-	    printf("body =%s\n",parsers.body.c_str());
-		int len = parsers.numbers.size();
-		for( int i = 0; i < len; i++)
-		{
-			printf("%d : %s == %s\n",i, parsers.numbers[i].key.c_str(),parsers.numbers[i].value.c_str());
-		}	    
+	 //    printf("body =%s\n",parsers.body.c_str());
+		// int len = parsers.numbers.size();
+		// for( int i = 0; i < len; i++)
+		// {
+		// 	printf("%d : %s == %s\n",i, parsers.numbers[i].key.c_str(),parsers.numbers[i].value.c_str());
+		// }	    
 		//longin function
 		if(parsers.body == "/asp/login.asp"){
 			vector<USER_Table> reqq;
@@ -322,7 +322,135 @@ namespace http {
 	    	//std::cout << out << std::endl;
 		    rep.content = out;
 		}
-
+		if(parsers.body == "/asp/station.asp"){
+			Json::Value config;
+			Json::Reader reader;
+			Json::Value root;
+			int len = parsers.numbers.size();
+			if( len == 1){
+				if(parsers.numbers[0].key == "station")
+				{
+					if (reader.parse(parsers.numbers[0].value, config))
+		    		{
+		    			printf("recv  the station = %s\n", config["value"].asString().c_str());
+	    				//std::cout << "update status------" << std::endl;
+		                my_ulonglong Rowcount = ptr_mysql->update_user_info("user", "car", (char*)"car_id", (char*)config["car_id"].asString().c_str(),(char*)config["key"].asString().c_str(),(char*)config["value"].asString().c_str());
+		                if(Rowcount == 1){
+		                	root["status"] = "success";
+		                    std::cout << "updata station ok" << std::endl;
+		                }else{
+		                	root["status"] = "error";
+		                    std::cout << "update station error ! !" << std::endl;
+		                }
+		    		}
+				}
+			}
+			std::string out = root.toStyledString();
+	    	//std::cout << out << std::endl;
+		    rep.content = out;
+		}
+		//request user_info function
+		if(parsers.body == "/asp/car_info.asp"){
+			Json::Value root;
+	    	Json::Value arrayObj;
+	    	Json::Value item;
+	    	root["status"] = "success";
+			vector<CAR_Table> reqq;
+			char cmd_str[200];
+		    ptr_mysql->query_tabel_all("user", "car",cmd_str);
+		    ptr_mysql->runQuery(&reqq, (const char *)cmd_str);
+		    int len = reqq.size();
+		    root["count"] = len;
+		    for(int i = 0; i < len; i++){
+                CAR_Table v =    reqq.at(i);
+                item["id"] = get<0>(v);
+                item["car_id"] = get<1>(v);
+                item["user_id"] = get<2>(v);
+                item["status"] = get<3>(v);
+                item["car_status"] = get<4>(v);
+                item["sensor_status"] = get<5>(v);
+                item["latitude"] = get<6>(v);
+                item["longitude"] = get<7>(v);
+                item["x"] = get<8>(v);
+                item["y"] = get<9>(v);
+                item["z"] = get<10>(v);
+                item["speed"] = get<11>(v);
+                item["yaw"] = get<12>(v);
+                item["pitch"] = get<13>(v);
+                item["roll"] = get<14>(v);
+                arrayObj.append(item);
+		    }
+		    root["array"] = arrayObj;
+		    std::string out = root.toStyledString();
+	    	//std::cout << out << std::endl;
+		    rep.content = out;
+		}
+		//request user_info function
+		if(parsers.body == "/asp/car_pos.asp"){
+			//printf("/asp/car_pos.asp--------------\n");
+			Json::Value config;
+			Json::Reader reader;
+			Json::Value root;
+			root["status"] = "success";
+			int len = parsers.numbers.size();
+			if( len == 2){
+				if(parsers.numbers[0].key == "pos")
+				{
+					if (reader.parse(parsers.numbers[0].value, config))
+		    		{
+						std::cout << "-----------sync" << std::endl;
+			            if(config["type"].asString() == "pos"){ //latitude,longitude,
+			                Json::Value pos = config["pos"];
+			                my_ulonglong Rowcount = ptr_mysql->update_pos("user", "car", (char*)config["car_id"].asString().c_str(), config["latitude"].asDouble(), config["longitude"].asDouble(),pos["x"].asDouble(),pos["y"].asDouble(),pos["z"].asDouble(), (float)config["speed"].asDouble(), config["yaw"].asDouble(), config[
+			                    "pitch"].asDouble(), config["roll"].asDouble());
+			                if(Rowcount == 1){
+			                    //std::cout << "update pos ok" << std::endl;
+			                }else if(Rowcount == 0){
+			                    std::cout << "the car_id =" << config["car_id"].asString() << "not registe on server !" <<std::endl;
+			                }
+			                root["status"] = "success";
+			            }else if(config["type"].asString() == "status"){
+			                //std::cout << "update status------" << std::endl;
+			                my_ulonglong Rowcount = ptr_mysql->update_user_info("user", "car", (char*)"car_id", (char*)config["car_id"].asString().c_str(),(char*)config["key"].asString().c_str(),(char*)config["value"].asString().c_str());
+			                if(Rowcount == 1){
+			                    //std::cout << "updata status ok" << std::endl;
+			                }else{
+			                    std::cout << "update status error ! !" << std::endl;
+			                }
+			                root["status"] = "success";
+			            }else if(config["type"].asString() == "get_station"){
+			                std::cout << "update status------get_station" << std::endl;
+			                vector<CAR_Table> reqq;
+							char cmd_str[200];
+						    ptr_mysql->query_tabel_all("user", "car",cmd_str);
+						    ptr_mysql->runQuery(&reqq, (const char *)cmd_str);
+						    int len = reqq.size();
+						    for(int i = 0; i < len; i++){
+				                CAR_Table v =    reqq.at(i);
+				                root["station"] = get<5>(v);
+						    }
+						    root["status"] = "success";
+			            }else if(config["type"].asString() == "reset_station"){
+			                std::cout << "update status------" << std::endl;
+			                printf("reset the station to zero!\n");
+			                root["status"] = "success";
+		    				//std::cout << "update status------" << std::endl;
+			                my_ulonglong Rowcount = ptr_mysql->update_user_info("user", "car", (char*)"car_id", (char*)config["car_id"].asString().c_str(),(char*)config["key"].asString().c_str(),(char*)config["value"].asString().c_str());
+			                if(Rowcount == 1){
+			                	root["status"] = "reset_ok";
+			                    std::cout << "updata station ok" << std::endl;
+			                }else{
+			                	root["status"] = "error";
+			                    std::cout << "update station error ! !" << std::endl;
+			                }
+			            }
+		        	}
+				}
+			}
+		    std::string out = root.toStyledString();
+	    	//std::cout << out << std::endl;
+		    rep.content = out;
+		}
 	    rep.headers.resize(2);
 	    rep.headers[0].name = "Content-Length";
 	    rep.headers[0].value = std::to_string(rep.content.size());
